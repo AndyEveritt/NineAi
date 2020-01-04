@@ -14,6 +14,7 @@ class Game:
         self.winner = None
 
     def change_team(self):
+        # sleep(0.2)
         if self.team == Teams.black:
             self.team = Teams.white
         else:
@@ -21,39 +22,42 @@ class Game:
 
     def play(self, location):
         self.grid[location] = self.team.value
-        self.check_win_grid(self.grid)
+        self.winner = self.check_win_grid(self.grid)
         self.change_team()
 
     def check_win_grid(self, grid):
         def check_winner(array):
             if len(array) == 1:
-                winner = array.pop()
-                if winner in Teams._value2member_map_:
-                    self.winner = Teams._value2member_map_[winner]
+                winner_num = array.pop()
+                if winner_num in Teams._value2member_map_:
+                    winner = Teams._value2member_map_[winner_num]
+                    return winner
+
+        winner = None
 
         # check draw
         if np.count_nonzero(grid) == grid.size:
-            self.winner = 'Draw'
+            winner = 'Draw'
 
         # check rows
         for i in range(grid.shape[0]):
             row = set(grid[i])
-            check_winner(row)
+            winner = check_winner(row)
 
         # check columns
         for j in range(grid.shape[1]):
             column = set(grid[:, j])
-            check_winner(column)
+            winner = check_winner(column)
 
         # check main diagonal
         diagonal = set(grid.diagonal())
-        check_winner(diagonal)
+        winner = check_winner(diagonal)
 
         # check anti-diagonal
         diagonal = set(np.fliplr(grid).diagonal())
-        check_winner(diagonal)
+        winner = check_winner(diagonal)
 
-        return self.winner
+        return winner
 
     def display(self):
         pass
