@@ -3,6 +3,7 @@ from ai import Ai
 from teams import Teams
 
 import threading
+import numpy as np
 
 
 def check_game_end(game):
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     ai_white = Ai(Teams.white, game)
 
     black = threading.Thread(target=ai_black.random_turn)
-    white = threading.Thread(target=ai_white.random_turn)
+    white = threading.Thread(target=ai_white.minimax)
 
     black.start()
     white.start()
