@@ -13,9 +13,12 @@ class Game:
         self.winner = None
 
     def next_turn(self):
-        x_location = np.random.randint(0, self.grid.shape[0])
-        y_location = np.random.randint(0, self.grid.shape[1])
-        self.play(self.team, (x_location, y_location))
+        location = (np.random.randint(0, self.grid.shape[0]),
+                    np.random.randint(0, self.grid.shape[1]))
+        while(self.grid[location]):
+            location = (np.random.randint(0, self.grid.shape[0]),
+                        np.random.randint(0, self.grid.shape[1]))
+        self.play(self.team, location)
         self.check_win_grid(self.grid)
 
         if self.winner:
@@ -58,10 +61,14 @@ class Game:
         diagonal = set(np.fliplr(grid).diagonal())
         check_winner(diagonal)
 
+        # check draw
+        if np.count_nonzero(grid) == grid.size:
+            self.winner = 'Draw'
+
     def display(self):
         pass
 
 
-game = Game(2)
+game = Game(3)
 game.next_turn()
 pass
