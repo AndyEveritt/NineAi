@@ -37,12 +37,8 @@ class Game:
         def check_winner(array):
             if len(array) == 1:
                 winner = array.pop()
-                if winner == Teams.black.value:
-                    self.winner = Teams.black
-                elif winner == Teams.white.value:
-                    self.winner = Teams.white
-                else:
-                    winner = None
+                if winner in Teams._value2member_map_:
+                    self.winner = Teams._value2member_map_[winner]
 
         # check rows
         for i in range(grid.shape[0]):
