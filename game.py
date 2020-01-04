@@ -6,15 +6,15 @@ from time import sleep
 
 class Game:
     def __init__(self, size, line_length=3):
-        self.grid = np.zeros(size, 'uint8')
+        self.grid = np.zeros((size, size), 'uint8')
         self.line_length = line_length  # how many squares in a line to win
 
         self.team = Teams.black
         self.winner = None
 
     def next_turn(self):
-        x_location = np.random.randint(0, 3)
-        y_location = np.random.randint(0, 3)
+        x_location = np.random.randint(0, self.grid.shape[0])
+        y_location = np.random.randint(0, self.grid.shape[1])
         self.play(self.team, (x_location, y_location))
         self.check_win_grid(self.grid)
 
@@ -53,14 +53,19 @@ class Game:
         for j in range(grid.shape[1]):
             column = set(grid[:, j])
             check_winner(column)
-        
-        # check diagonal
-        # for i in range
+
+        # check main diagonal
+        diagonal = set(grid.diagonal())
+        check_winner(diagonal)
+
+        # check anti-diagonal
+        diagonal = set(np.fliplr(grid).diagonal())
+        check_winner(diagonal)
 
     def display(self):
         pass
 
 
-game = Game((3, 3))
+game = Game(2)
 game.next_turn()
 pass
