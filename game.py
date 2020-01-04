@@ -1,5 +1,6 @@
 import numpy as np
 
+from ai import Ai
 from teams import Teams
 from time import sleep
 
@@ -12,29 +13,16 @@ class Game:
         self.team = Teams.black
         self.winner = None
 
-    def next_turn(self):
-        location = (np.random.randint(0, self.grid.shape[0]),
-                    np.random.randint(0, self.grid.shape[1]))
-        while(self.grid[location]):
-            location = (np.random.randint(0, self.grid.shape[0]),
-                        np.random.randint(0, self.grid.shape[1]))
-        self.play(self.team, location)
-        self.check_win_grid(self.grid)
-
-        if self.winner:
-            return self.winner
-
-        self.change_team()
-        self.next_turn()
-
     def change_team(self):
         if self.team == Teams.black:
             self.team = Teams.white
         else:
             self.team = Teams.black
 
-    def play(self, team, location):
-        self.grid[location] = team.value
+    def play(self, location):
+        self.grid[location] = self.team.value
+        self.check_win_grid(self.grid)
+        self.change_team()
 
     def check_win_grid(self, grid):
         def check_winner(array):
@@ -42,6 +30,10 @@ class Game:
                 winner = array.pop()
                 if winner in Teams._value2member_map_:
                     self.winner = Teams._value2member_map_[winner]
+
+        # check draw
+        if np.count_nonzero(grid) == grid.size:
+            self.winner = 'Draw'
 
         # check rows
         for i in range(grid.shape[0]):
@@ -61,14 +53,7 @@ class Game:
         diagonal = set(np.fliplr(grid).diagonal())
         check_winner(diagonal)
 
-        # check draw
-        if np.count_nonzero(grid) == grid.size:
-            self.winner = 'Draw'
+        return self.winner
 
     def display(self):
         pass
-
-
-game = Game(3)
-game.next_turn()
-pass

@@ -1,25 +1,29 @@
-from p5 import *
+from game import Game
+from ai import Ai
+from teams import Teams
+
+import threading
 
 
-def setup():
-    size(640, 360)
-    no_stroke()
-    background(204)
+def check_game_end(game):
+    while black.is_alive() and white.is_alive():
+        pass
+
+    print(game.winner)
+    print(game.grid)
 
 
-def draw():
-    if mouse_is_pressed:
-        fill(random_uniform(255), random_uniform(127), random_uniform(51), 127)
-    else:
-        fill(255, 15)
+if __name__ == "__main__":
+    game = Game(3)
 
-    circle_size = random_uniform(low=10, high=80)
+    ai_black = Ai(Teams.black, game)
+    ai_white = Ai(Teams.white, game)
 
-    circle((mouse_x, mouse_y), circle_size)
+    black = threading.Thread(target=ai_black.random_turn)
+    white = threading.Thread(target=ai_white.random_turn)
 
+    black.start()
+    white.start()
 
-def key_pressed(event):
-    background(204)
-
-
-run()
+    check_game_end(game)
+    pass
