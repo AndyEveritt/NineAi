@@ -20,6 +20,7 @@ class Game:
             self.team = Teams.black
 
     def play(self, location):
+        sleep(0.2)
         self.grid[location] = self.team.value
         self.winner = self.check_win_grid(self.grid)
         self.change_team()
