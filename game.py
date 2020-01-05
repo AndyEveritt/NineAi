@@ -1,6 +1,5 @@
 import numpy as np
 
-from ai import Ai
 from teams import Teams
 from time import sleep
 
@@ -35,27 +34,35 @@ class Game:
 
         winner = None
 
-        # check draw
-        if np.count_nonzero(grid) == grid.size:
-            winner = 'Draw'
-
         # check rows
         for i in range(grid.shape[0]):
             row = set(grid[i])
             winner = check_winner(row)
+            if winner:
+                return winner
 
         # check columns
         for j in range(grid.shape[1]):
             column = set(grid[:, j])
             winner = check_winner(column)
+            if winner:
+                return winner
 
         # check main diagonal
         diagonal = set(grid.diagonal())
         winner = check_winner(diagonal)
+        if winner:
+            return winner
 
         # check anti-diagonal
         diagonal = set(np.fliplr(grid).diagonal())
         winner = check_winner(diagonal)
+        if winner:
+            return winner
+
+        # check draw
+        if winner is None and np.count_nonzero(grid) == grid.size:
+            winner = 'Draw'
 
         return winner
 

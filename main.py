@@ -3,7 +3,9 @@ from ai import Ai
 from teams import Teams
 
 import threading
+# import yappi
 import numpy as np
+from time import sleep
 
 
 def check_game_end(game):
@@ -19,6 +21,8 @@ def check_game_end(game):
 
 
 if __name__ == "__main__":
+    # yappi.start()
+
     game = Game(3)
 
     ai_black = Ai(Teams.black, game)
@@ -31,4 +35,7 @@ if __name__ == "__main__":
     white.start()
 
     check_game_end(game)
+
+    # yappi.get_func_stats().print_all()
+    # yappi.get_thread_stats().print_all()
     pass
